@@ -8,6 +8,11 @@ const registerCommands = (bot) => {
     // bot.command('contacts',(ctx) => contacts(ctx))
     // bot.action('contacts',(ctx) => contacts(ctx))
     bot.on('message', (ctx) => sendMessage(ctx))
+    // bot.on('mes', (ctx) => {
+    //     let chat = ctx.channelPost.chat
+    //     console.log(ctx);
+    //     // ctx.telegram.forwardMessage(`@${chat.username}`, '@example', MESSAGE_ID)
+    // })
 }
 
 module.exports = registerCommands

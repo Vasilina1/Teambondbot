@@ -12,6 +12,7 @@ CREATE TABLE users (
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
   user_id INTEGER,
+  message_id INTEGER,
   sent_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   category TEXT COLLATE pg_catalog."default",
   content TEXT COLLATE pg_catalog."default",
