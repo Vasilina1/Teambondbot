@@ -4,17 +4,27 @@ const selectCategory = require('../menus/selectCategory');
 const adminMenu = require('../menus/adminMenu');
 const addToBlacklist = require('../dbApi/users/addToBlacklist');
 const blacklistMenu = require('../menus/blacklistMenu');
+const createQuestion = require('../dbApi/messages/createQuestion');
+const collectAnswer = require('./collectAnswer');
 
 const groups = require('../const/groups.json');
 
 const { Pool } = require('pg');
-const createQuestion = require('../dbApi/messages/createQuestion');
 const pool = new Pool();
 
 const sendMessage = async (ctx) => {
   const client = await pool.connect();
   try {
     const messageContext = ctx.update.message;
+
+    // логика обработки ответов из чатов
+    const chatId = ctx.update.message?.chat?.id;
+    if (chatId < 0) {
+      // если сообщение словили в групповом чате
+      collectAnswer(ctx);
+      return;
+    }
+
     const userContext = messageContext.from;
     const userName = userContext.first_name;
     const telegramId = userContext.id;
@@ -64,10 +74,10 @@ const sendMessage = async (ctx) => {
     const symbol = user.user_role === 'admin' ? '&' : 
                   (user.user_role === 'dispatcher' ? '\\*' : '');
 
-    ctx.telegram.sendMessage(groups[category],
+    const sentMessage = await ctx.telegram.sendMessage(groups[category],
                             `${messageContext?.text} | от ${symbol}[${userName}](${'tg://user?id=' + telegramId})`, {parse_mode: "Markdown"});
     
-    await createQuestion(client, telegramId, category, messageContext?.text);
+    await createQuestion(client, telegramId, sentMessage.message_id, category, messageContext?.text);
     // После отправки сообщения возвращаем категорию пользователя в 0,
     // уведомляем об успехе и возвращаем в меню,
     // админа возвращаем в стартовое меню
