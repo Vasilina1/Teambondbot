@@ -10,9 +10,10 @@ const collectAnswer = require('./collectAnswer');
 const groups = require('../const/groups.json');
 
 const { Pool } = require('pg');
+const getCompletion = require('../openai/getCompletion');
 const pool = new Pool();
 
-const sendMessage = async (ctx) => {
+const sendMessage = async (ctx, openai) => {
   const client = await pool.connect();
   try {
     const messageContext = ctx.update.message;
@@ -38,6 +39,25 @@ const sendMessage = async (ctx) => {
       return;
     }
     const category = user.category;
+
+    if (category === 'AI') {
+      // Если пользователь спрашивает у AI,
+      // возвращаем категорию пользователя в 0,
+      // ждём ответ от AI и после возвращаем на выбор категории
+      await updateUserCategory(client, telegramId, 0);
+      ctx.reply('AI-помощник уже ищет ответ. Пожалуйста, подождите.');
+      const completion = await getCompletion(openai, messageContext?.text);
+      ctx.reply(completion);
+      setTimeout(() => {
+        // пауза, чтобы ответ не пришел раньше
+        if (user.user_role === 'admin') {
+          adminMenu(ctx, user.user_role);
+        } else {
+          selectCategory(ctx, user.user_role);
+        }
+      }, 1000);
+      return;
+    }
     
     if (category === 'Добавление в ЧС') {
       // Если мы в меню добавления в ЧС

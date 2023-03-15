@@ -1,4 +1,5 @@
 {
     "BOT_TOKEN": "",
-    "BOT_URL": "http://localhost:8301"
+    "BOT_URL": "http://localhost:8301",
+    "OPENAI_API_KEY": ""
 }

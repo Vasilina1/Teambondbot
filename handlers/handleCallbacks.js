@@ -1,6 +1,7 @@
 const readUser = require("../dbApi/users/read");
 const updateUserCategory = require("../dbApi/users/updateCategory");
 const composeTicket = require("../menus/composeTicket");
+const askAI = require("../menus/askAI");
 const selectCategory = require("../menus/selectCategory");
 const adminMenu = require("../menus/adminMenu");
 const blacklistMenu = require("../menus/blacklistMenu");
@@ -49,7 +50,11 @@ const handleCallbacks = async (ctx) => {
       case 'Диспетчеры':
       case 'Веб':
         await updateUserCategory(client, telegramId, callbackDataArray[0]);
-        composeTicket(ctx, callbackDataArray[0]);
+        composeTicket(ctx, callbackDataArray[0], callbackDataArray[1]);
+        break;
+      case 'AI':
+        await updateUserCategory(client, telegramId, callbackDataArray[0]);
+        askAI(ctx, callbackDataArray[0]);
         break;
       case 'backToCategories':
         // ставим категорию 0, если возвращаемся обратно

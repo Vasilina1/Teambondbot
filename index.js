@@ -16,11 +16,18 @@ if (token === undefined) {
   throw new Error('BOT_TOKEN must be provided!')
 }
 
+// Setup OpenAI config
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+  apiKey: config.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
 // Define bot
 const bot = new Telegraf(token)
 
 // Define bot commands
-registerCommands(bot);
+registerCommands(bot, openai);
 
 // Launch bot
 bot.launch()
