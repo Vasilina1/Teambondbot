@@ -6,7 +6,7 @@
   "author": "bl1n0v <bl1n0v@example.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon index.js",
+    "dev": "nodemon index.js",
     "prod": "NODE_ENV=production nodemon index.js",
     "test": "node test.js"
   },

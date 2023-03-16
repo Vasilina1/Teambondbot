@@ -12,13 +12,13 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 (async () => {
-  const file = await openai.createFile(
+  const file = await openai.createFile( //отправляем данные
     fs.createReadStream("./trainingData.jsonl"),
     "fine-tune"
   );
   console.log(file.data.id);
 
-  const response = await openai.createFineTune({
+  const response = await openai.createFineTune({ //отправляем в очередб на тюнинг 
     training_file: file.data.id,
   });
   
