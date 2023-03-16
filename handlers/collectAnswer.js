@@ -10,11 +10,18 @@ const collectAnswer = async (ctx) => {
     if (messageContext.hasOwnProperty('reply_to_message') &&
         messageContext?.text.split(':')[0] === 'Ответ') {
       // записываем ответ, если сообщение - ответ на сообщение бота и содержит в себе "Ответ:"
+      const replyReceiver = messageContext.reply_to_message.entities.find(v => v?.type === 'text_mention'); // id пользователя, которому отправим ответ;
+      const replyReceiverId = replyReceiver.user.id;
+      
+      const question = messageContext.reply_to_message.text;
+
       const messageId = messageContext.reply_to_message.message_id;
       const chatContext = messageContext.reply_to_message.chat;
       const category = chatContext.title;
       const answer = messageContext.text.split(':').slice(1).join(':');
       await writeAnswer(client, messageId, category, answer);
+      await ctx.telegram.sendMessage(replyReceiverId,
+        `${question} \n\nОтвет: ${answer}`, {parse_mode: "Markdown"});
     }
   } catch (err) {
     console.log(err);
