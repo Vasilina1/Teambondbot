@@ -61,6 +61,15 @@ const sendMessage = async (ctx, openai) => {
     
     if (category === 'Добавление в ЧС') {
       // Если мы в меню добавления в ЧС
+
+      const isAdmin = user.user_role === 'admin';
+      // В случае, если пользователь в ч/с
+      if (!isAdmin) {
+        ctx.reply('Вы не являетесь администратором. Для управления правами обратитесь к администратору');
+        await updateUserCategory(client, telegramId, 0);
+        return;
+      }
+
       const blacklistCandidateData = await readUser(client, messageContext?.text);
       const blacklistCandidate = blacklistCandidateData.rows[0];
       if (!blacklistCandidate) {

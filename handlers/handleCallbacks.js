@@ -66,27 +66,41 @@ const handleCallbacks = async (ctx) => {
         break;
       case 'Черный список':
       case 'backToBlacklist':
-        blacklistMenu(ctx, callbackDataArray[1]);
+        if (callbackDataArray[1] === 'admin') {
+          blacklistMenu(ctx, callbackDataArray[1]);
+        }
         break;
       case 'backToAdmin':
-        adminMenu(ctx, callbackDataArray[1])
+        if (callbackDataArray[1] === 'admin') {
+          adminMenu(ctx, callbackDataArray[1])
+        }
         break;
       case 'addToBlacklist':
-        addToBlacklistMenu(ctx, callbackDataArray[1]);
+        if (callbackDataArray[1] === 'admin') {
+          addToBlacklistMenu(ctx, callbackDataArray[1]);
+        }
         break;
       case 'removeFromBlacklist':
-        await removeUserFromBlacklist(client, callbackDataArray[2]);
-        blacklistMenu(ctx, callbackDataArray[1]);
+        if (callbackDataArray[1] === 'admin') {
+          await removeUserFromBlacklist(client, callbackDataArray[2]);
+          blacklistMenu(ctx, callbackDataArray[1]);
+        }
         break;
       case 'Статистика':
       case 'backToStatsByPeriod':
-        statsByPeriod(ctx, callbackDataArray[1]);
+        if (callbackDataArray[1] === 'admin') {
+          statsByPeriod(ctx, callbackDataArray[1]);
+        };
         break;
       case 'statsByPeriod':
-        statsByType(ctx, callbackDataArray[1], callbackDataArray[2]);
+        if (callbackDataArray[1] === 'admin') {
+          statsByType(ctx, callbackDataArray[1], callbackDataArray[2]);
+        }
         break;
       case 'statsByType':
-        getStats(ctx, callbackDataArray[1], callbackDataArray[2]);
+        if (callbackDataArray[3] === 'admin') {
+          getStats(ctx, callbackDataArray[1], callbackDataArray[2]);
+        }
         break;
     }
   } catch (err) {
