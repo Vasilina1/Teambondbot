@@ -5,9 +5,9 @@ const statsByType = (ctx, userRole, period) => {
       'Выберите тип статистики:',
       Markup.inlineKeyboard([
         [ 
-          Markup.button.callback('Сообщения', `statsByType__${period}__messages`) ,
-          Markup.button.callback('Категории', `statsByType__${period}__categories`) ,
-          Markup.button.callback('Заявки', `statsByType__${period}__orders`)
+          Markup.button.callback('Сообщения', `statsByType__${period}__messages__${userRole}`) ,
+          Markup.button.callback('Категории', `statsByType__${period}__categories__${userRole}`) ,
+          Markup.button.callback('Заявки', `statsByType__${period}__orders__${userRole}`)
         ],
         [ Markup.button.callback('Назад', `backToStatsByPeriod__${userRole}`) ],
       ])
